@@ -182,10 +182,36 @@ def delete_user_controller(user_id):
 def list_tickets_controller():
     usuario = Usuario.query.get(session.get('user_id'))
     if usuario and usuario.tipo_perfil == 'Cliente':
-        chamados = Chamado.query.filter_by(usuario_id=usuario.id).all()
+        chamados = Chamado.query.filter_by(usuario_id=usuario.id).filter(Chamado.status != 'Fechado').all()
     else:
-        chamados = Chamado.query.all()
+        chamados = Chamado.query.filter(Chamado.status != 'Fechado').all()
     return render_template('tickets.html', chamados=chamados)
+
+def search_tickets_controller():
+    usuario = Usuario.query.get(session.get('user_id'))
+    q = request.args.get('q', '').strip()
+
+    if not q:
+        return redirect(url_for('list_tickets'))
+
+    search_term = f'%{q}%'
+
+    # Tenta buscar por ID exato se o termo for numérico
+    id_filter = (Chamado.id == int(q)) if q.isdigit() else db.false()
+    query = Chamado.query.filter(
+        db.or_(
+            Chamado.titulo.ilike(search_term),
+            Chamado.descricao.ilike(search_term),
+            id_filter
+        )
+    )
+
+    if usuario and usuario.tipo_perfil == 'Cliente':
+        query = query.filter_by(usuario_id=usuario.id)
+
+    chamados = query.all()
+    return render_template('tickets.html', chamados=chamados, search_query=q)
+
 
 def create_ticket_controller():
     categorias = Categoria.query.all()

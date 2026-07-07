@@ -25,41 +25,89 @@
 
     <header class="app-header">
         <div class="nav-container">
-            <a href="/" class="brand-logo">
-                <i class="fa-solid fa-ticket-simple text-glow"></i> Ticket<span>Manager</span>
-            </a>
-            
-            <button class="menu-toggle-btn" id="menu-toggle-btn" title="Abrir menu">
-                <i class="fa-solid fa-bars"></i>
-            </button>
+            <div class="nav-left">
+                <a href="/" class="brand-logo">
+                    <i class="fa-solid fa-ticket-simple text-glow"></i> Ticket<span>Manager</span>
+                </a>
 
-            <nav class="nav-links" id="nav-links">
                 {% if session.get('user_id') %}
-                    <a href="{{ url_for('list_tickets') }}" class="nav-link"><i class="fa-solid fa-ticket-simple"></i> Chamados</a>
-                    <a href="{{ url_for('create_ticket') }}" class="nav-link"><i class="fa-solid fa-circle-plus"></i> Abrir Chamado</a>
-                    
+                <nav class="nav-menu" id="nav-menu">
+                    <a href="{{ url_for('list_tickets') }}" class="nav-link" id="nav-link-tickets">
+                        <i class="fa-solid fa-ticket-simple"></i> Chamados
+                    </a>
+                    <a href="{{ url_for('create_ticket') }}" class="nav-link" id="nav-link-new-ticket">
+                        <i class="fa-solid fa-circle-plus"></i> Novo
+                    </a>
                     {% if session.get('tipo_perfil') == 'Admin' %}
-                        <a href="{{ url_for('list_users') }}" class="nav-link"><i class="fa-solid fa-users"></i> Usuários</a>
-                        <a href="{{ url_for('list_categories') }}" class="nav-link"><i class="fa-solid fa-tags"></i> Categorias</a>
-                        <a href="{{ url_for('list_cities') }}" class="nav-link"><i class="fa-solid fa-city"></i> Cidades</a>
-                    {% endif %}
-                    
-                    <div class="nav-user-greeting">
-                        <span style="color: var(--text-primary);">Olá, <strong style="font-weight:600;"><a href="{{ url_for('user_profile') }}" style="color: inherit; text-decoration: none;" title="Ver Perfil">{{ session.get('username') }}</a></strong></span>
-                        <span class="badge badge-username" style="font-size:0.75rem;">{{ session.get('tipo_perfil') }}</span>
+                    <div class="nav-dropdown" id="nav-dropdown-admin">
+                        <button class="nav-link nav-dropdown-toggle" id="admin-dropdown-btn">
+                            <i class="fa-solid fa-gear"></i> Admin <i class="fa-solid fa-chevron-down nav-chevron"></i>
+                        </button>
+                        <div class="nav-dropdown-menu" id="admin-dropdown-menu">
+                            <a href="{{ url_for('list_users') }}" class="nav-dropdown-item" id="nav-link-users">
+                                <i class="fa-solid fa-users"></i> Usuários
+                            </a>
+                            <a href="{{ url_for('list_categories') }}" class="nav-dropdown-item" id="nav-link-categories">
+                                <i class="fa-solid fa-tags"></i> Categorias
+                            </a>
+                            <a href="{{ url_for('list_cities') }}" class="nav-dropdown-item" id="nav-link-cities">
+                                <i class="fa-solid fa-city"></i> Cidades
+                            </a>
+                        </div>
                     </div>
-                    <a href="{{ url_for('logout') }}" class="btn-nav btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
-                {% else %}
-                    <a href="{{ url_for('login') }}" class="nav-link"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
-                    <a href="{{ url_for('register') }}" class="btn-nav btn-signup"><i class="fa-solid fa-user-plus"></i> Registrar</a>
+                    {% endif %}
+                </nav>
                 {% endif %}
-                
+            </div>
+
+            <div class="nav-right">
+                {% if session.get('user_id') %}
+                <form class="nav-search-form" action="{{ url_for('search_tickets') }}" method="GET" id="nav-search-form">
+                    <div class="nav-search-wrapper">
+                        <i class="fa-solid fa-magnifying-glass nav-search-icon"></i>
+                        <input type="text" name="q" class="nav-search-input" placeholder="Pesquisar..." autocomplete="off" id="nav-search-input">
+                    </div>
+                </form>
+
+                <div class="nav-user-area" id="nav-user-area">
+                    <button class="nav-user-btn" id="user-menu-btn" title="Menu do usuário">
+                        <div class="nav-avatar">
+                            {{ session.get('username', '?')[0] | upper }}
+                        </div>
+                        <span class="nav-username">{{ session.get('username') }}</span>
+                        <i class="fa-solid fa-chevron-down nav-chevron"></i>
+                    </button>
+                    <div class="nav-user-dropdown" id="user-dropdown-menu">
+                        <div class="nav-user-dropdown-header">
+                            <strong>{{ session.get('username') }}</strong>
+                            <span class="badge badge-username" style="font-size:0.7rem;">{{ session.get('tipo_perfil') }}</span>
+                        </div>
+                        <div class="nav-user-dropdown-divider"></div>
+                        <a href="{{ url_for('user_profile') }}" class="nav-dropdown-item" id="nav-link-profile">
+                            <i class="fa-solid fa-user"></i> Meu Perfil
+                        </a>
+                        <div class="nav-user-dropdown-divider"></div>
+                        <a href="{{ url_for('logout') }}" class="nav-dropdown-item nav-dropdown-item-danger" id="nav-link-logout">
+                            <i class="fa-solid fa-right-from-bracket"></i> Sair
+                        </a>
+                    </div>
+                </div>
+                {% else %}
+                <a href="{{ url_for('login') }}" class="nav-link" id="nav-link-login"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+                <a href="{{ url_for('register') }}" class="btn-nav btn-signup" id="nav-link-register"><i class="fa-solid fa-user-plus"></i> Registrar</a>
+                {% endif %}
+
                 <button id="theme-toggle" class="theme-toggle-btn" title="Alternar tema">
                     <i class="fa-solid fa-sun"></i>
                 </button>
-            </nav>
+
+                <button class="menu-toggle-btn" id="menu-toggle-btn" title="Abrir menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
         </div>
     </header>
+
 
     <main class="main-content">
         <!-- Flash Messages -->
@@ -92,7 +140,7 @@
         <p>&copy; 2026 Ticket Manager. Desenvolvido com <i class="fa-solid fa-heart text-danger animate-pulse"></i> em Flask.</p>
     </footer>
 
-    <!-- Theme and Mobile Nav Script -->
+    <!-- Theme, Dropdowns, and Mobile Nav Script -->
     <script>
         // Theme logic
         const themeToggleBtn = document.getElementById('theme-toggle');
@@ -111,45 +159,68 @@
         themeToggleBtn.addEventListener('click', () => {
             const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            
             document.documentElement.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
             updateToggleIcon(newTheme);
         });
 
-        // Mobile Nav toggles
-        const menuToggleBtn = document.getElementById('menu-toggle-btn');
-        const navLinks = document.getElementById('nav-links');
+        // Generic dropdown toggle helper
+        function setupDropdown(toggleId, menuId) {
+            const toggle = document.getElementById(toggleId);
+            const menu = document.getElementById(menuId);
+            if (!toggle || !menu) return;
 
-        if (menuToggleBtn && navLinks) {
-            menuToggleBtn.addEventListener('click', (e) => {
-                navLinks.classList.toggle('active');
-                
-                // Change burger icon to cross when active
-                const toggleIcon = menuToggleBtn.querySelector('i');
-                if (navLinks.classList.contains('active')) {
-                    toggleIcon.className = 'fa-solid fa-xmark';
-                } else {
-                    toggleIcon.className = 'fa-solid fa-bars';
-                }
+            toggle.addEventListener('click', (e) => {
                 e.stopPropagation();
+                // Close other open dropdowns
+                document.querySelectorAll('.nav-dropdown-menu, .nav-user-dropdown').forEach(d => {
+                    if (d !== menu) d.classList.remove('open');
+                });
+                menu.classList.toggle('open');
+            });
+        }
+
+        setupDropdown('admin-dropdown-btn', 'admin-dropdown-menu');
+        setupDropdown('user-menu-btn', 'user-dropdown-menu');
+
+        // Close all dropdowns when clicking outside
+        document.addEventListener('click', (e) => {
+            document.querySelectorAll('.nav-dropdown-menu, .nav-user-dropdown').forEach(d => {
+                if (!d.parentElement.contains(e.target)) {
+                    d.classList.remove('open');
+                }
+            });
+        });
+
+        // Mobile Nav toggle
+        const menuToggleBtn = document.getElementById('menu-toggle-btn');
+        const navMenu = document.getElementById('nav-menu');
+
+        if (menuToggleBtn) {
+            menuToggleBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isOpen = document.body.classList.toggle('mobile-menu-open');
+                menuToggleBtn.querySelector('i').className = isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
             });
 
-            // Close menu when clicking outside
             document.addEventListener('click', (e) => {
-                if (!navLinks.contains(e.target) && !menuToggleBtn.contains(e.target)) {
-                    navLinks.classList.remove('active');
+                if (navMenu && !navMenu.contains(e.target) && !menuToggleBtn.contains(e.target)) {
+                    document.body.classList.remove('mobile-menu-open');
                     menuToggleBtn.querySelector('i').className = 'fa-solid fa-bars';
                 }
             });
         }
 
-        // Highlight Active Link
+        // Highlight Active Link (including dropdown items)
         const currentPath = window.location.pathname;
-        const links = document.querySelectorAll('.nav-link');
-        links.forEach(link => {
+        document.querySelectorAll('.nav-link, .nav-dropdown-item').forEach(link => {
             if (link.getAttribute('href') === currentPath) {
                 link.classList.add('active');
+                // If inside a dropdown, also highlight the parent toggle
+                const parentDropdown = link.closest('.nav-dropdown');
+                if (parentDropdown) {
+                    parentDropdown.querySelector('.nav-dropdown-toggle')?.classList.add('active');
+                }
             }
         });
     </script>

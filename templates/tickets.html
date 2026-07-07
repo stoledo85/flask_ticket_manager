@@ -14,6 +14,16 @@
         </a>
     </div>
 
+    {% if search_query %}
+    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; color: var(--text-secondary); font-size: 0.95rem;">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <span>Resultados para: <strong style="color: var(--text-primary);">{{ search_query }}</strong></span>
+        <a href="{{ url_for('list_tickets') }}" class="btn-action btn-edit" style="font-size: 0.8rem; padding: 0.25rem 0.6rem;">
+            <i class="fa-solid fa-xmark"></i> Limpar
+        </a>
+    </div>
+    {% endif %}
+
     <div class="glass-card table-responsive">
         <table class="data-table">
             <thead>

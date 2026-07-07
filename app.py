@@ -86,6 +86,13 @@ def delete_user(user_id):
 def list_tickets():
     return controllers.list_tickets_controller()
 
+# Rota de Pesquisa de Chamados
+@app.route('/tickets/search')
+@login_required
+def search_tickets():
+    return controllers.search_tickets_controller()
+
+
 # Rota de Abertura de Chamado
 @app.route('/tickets/new', methods=['GET', 'POST'])
 @login_required
