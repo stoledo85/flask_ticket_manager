@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block title %}Editar Usuário - Ticket Manager{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="glass-card auth-card">
+        <div class="card-header">
+            <h2>Editar Usuário</h2>
+            <p>Atualize as informações de <strong>@{{ usuario.username }}</strong></p>
+        </div>
+        <form action="{{ url_for('edit_user', user_id=usuario.id) }}" method="POST" class="form-group">
+            <div class="form-row">
+                <div class="input-wrapper">
+                    <label for="nome">Nome</label>
+                    <div class="input-icon-group">
+                        <i class="fa-solid fa-user-tag input-icon"></i>
+                        <input type="text" id="nome" name="nome" value="{{ usuario.nome }}" required placeholder="Nome">
+                    </div>
+                </div>
+                <div class="input-wrapper">
+                    <label for="sobrenome">Sobrenome</label>
+                    <div class="input-icon-group">
+                        <i class="fa-solid fa-user-tag input-icon"></i>
+                        <input type="text" id="sobrenome" name="sobrenome" value="{{ usuario.sobrenome }}" required placeholder="Sobrenome">
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-wrapper">
+                <label for="email">E-mail</label>
+                <div class="input-icon-group">
+                    <i class="fa-solid fa-envelope input-icon"></i>
+                    <input type="email" id="email" name="email" value="{{ usuario.email }}" required placeholder="E-mail">
+                </div>
+            </div>
+
+            <div class="input-wrapper">
+                <label for="username">Usuário (Username)</label>
+                <div class="input-icon-group">
+                    <i class="fa-solid fa-at input-icon"></i>
+                    <input type="text" id="username" name="username" value="{{ usuario.username }}" required placeholder="Nome de Usuário">
+                </div>
+            </div>
+            
+            <div class="input-wrapper">
+                <label for="tipo_perfil">Perfil do Usuário</label>
+                <div class="input-icon-group">
+                    <i class="fa-solid fa-user-shield input-icon"></i>
+                    <select id="tipo_perfil" name="tipo_perfil" required>
+                        <option value="Cliente" {% if usuario.tipo_perfil == 'Cliente' %}selected{% endif %}>Cliente</option>
+                        <option value="Técnico" {% if usuario.tipo_perfil == 'Técnico' %}selected{% endif %}>Técnico</option>
+                        <option value="Admin" {% if usuario.tipo_perfil == 'Admin' %}selected{% endif %}>Admin</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="input-wrapper">
+                <label for="cidade_id">Cidade / UF</label>
+                <div class="input-icon-group">
+                    <i class="fa-solid fa-city input-icon"></i>
+                    <select id="cidade_id" name="cidade_id">
+                        <option value="">Selecione uma Cidade...</option>
+                        {% for cidade in cidades %}
+                            <option value="{{ cidade.id }}" {% if usuario.cidade_id == cidade.id %}selected{% endif %}>{{ cidade.nome }} - {{ cidade.estado }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="input-wrapper">
+                <label for="senha">Nova Senha (deixe em branco para manter a atual)</label>
+                <div class="input-icon-group">
+                    <i class="fa-solid fa-lock input-icon"></i>
+                    <input type="password" id="senha" name="senha" placeholder="Digite uma nova senha se quiser alterar">
+                </div>
+            </div>
+
+            <div class="form-actions-row">
+                <a href="{{ url_for('list_users') }}" class="btn-secondary">
+                    Cancelar
+                </a>
+                <button type="submit" class="btn-primary">
+                    Salvar Alterações <i class="fa-solid fa-floppy-disk"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

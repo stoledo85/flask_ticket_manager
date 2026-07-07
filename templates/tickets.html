@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Chamados - Ticket Manager{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <div>
+            <h1>Gerenciamento de Chamados</h1>
+            <p class="subtitle">Visualize, filtre ou acompanhe os chamados abertos no sistema.</p>
+        </div>
+        <a href="{{ url_for('create_ticket') }}" class="btn-primary">
+            <i class="fa-solid fa-plus"></i> Novo Chamado
+        </a>
+    </div>
+
+    <div class="glass-card table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th style="width: 80px;">Nº</th>
+                    <th>Título</th>
+                    <th>Criado por</th>
+                    <th>Prioridade</th>
+                    <th>Status</th>
+                    <th>Data de Criação</th>
+                    <th class="text-center">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for chamado in chamados %}
+                    <tr>
+                        <td>
+                            <span class="badge badge-username">#{{ chamado.id }}</span>
+                        </td>
+                        <td>
+                            <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <strong style="color: var(--text-primary);">{{ chamado.titulo }}</strong>
+                                    {% if chamado.categoria %}
+                                        <span class="badge badge-username" style="font-size: 0.75rem; padding: 0.1rem 0.4rem; background-color: rgba(99, 102, 241, 0.1); color: var(--primary);">{{ chamado.categoria.nome }}</span>
+                                    {% endif %}
+                                </div>
+                                <small style="color: var(--text-secondary); max-width: 300px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{{ chamado.descricao }}">
+                                    {{ chamado.descricao }}
+                                </small>
+                            </div>
+                        </td>
+                        <td>
+                            <span style="color: var(--text-secondary);">{{ chamado.usuario.nome }} {{ chamado.usuario.sobrenome }}</span>
+                        </td>
+                        <td>
+                            <span class="badge badge-{{ chamado.prioridade | lower }}">{{ chamado.prioridade }}</span>
+                        </td>
+                        <td>
+                            {% set status_class = chamado.status.lower().replace(' ', '') %}
+                            <span class="badge badge-{{ status_class }}">{{ chamado.status }}</span>
+                        </td>
+                        <td>
+                            <span style="color: var(--text-secondary); font-size: 0.9rem;">
+                                {{ chamado.data_criacao.strftime('%d/%m/%Y %H:%M') }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="{{ url_for('ticket_details', ticket_id=chamado.id) }}" class="btn-action btn-edit" title="Ver Detalhes/Responder">
+                                    <i class="fa-solid fa-eye"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7" class="no-data text-center">
+                            <i class="fa-regular fa-folder-open"></i>
+                            <p>Nenhum chamado aberto até o momento.</p>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

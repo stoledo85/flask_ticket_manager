@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Meu Perfil - Ticket Manager{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="glass-card auth-card" style="max-width: 600px;">
+        <div class="card-header">
+            <h2>Meu Perfil</h2>
+            <p>Gerencie suas informações cadastrais e altere sua senha.</p>
+        </div>
+        
+        <!-- Exibição de Perfil (Apenas Leitura) -->
+        <div style="text-align: center; margin-bottom: 1.5rem;">
+            <span style="font-size: 0.9rem; color: var(--text-secondary); display: block; margin-bottom: 0.25rem;">Seu Perfil no Sistema:</span>
+            <span class="badge badge-{{ usuario.tipo_perfil | lower }}" style="font-size: 1.1rem; padding: 0.4rem 1rem;">
+                {{ usuario.tipo_perfil }}
+            </span>
+        </div>
+
+        <form action="{{ url_for('user_profile') }}" method="POST" class="form-group">
+            <div class="form-row">
+                <div class="input-wrapper">
+                    <label for="nome">Nome</label>
+                    <div class="input-icon-group">
+                        <i class="fa-solid fa-user-tag input-icon"></i>
+                        <input type="text" id="nome" name="nome" value="{{ usuario.nome }}" required placeholder="Nome">
+                    </div>
+                </div>
+                <div class="input-wrapper">
+                    <label for="sobrenome">Sobrenome</label>
+                    <div class="input-icon-group">
+                        <i class="fa-solid fa-user-tag input-icon"></i>
+                        <input type="text" id="sobrenome" name="sobrenome" value="{{ usuario.sobrenome }}" required placeholder="Sobrenome">
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-wrapper">
+                <label for="email">E-mail</label>
+                <div class="input-icon-group">
+                    <i class="fa-solid fa-envelope input-icon"></i>
+                    <input type="email" id="email" name="email" value="{{ usuario.email }}" required placeholder="E-mail">
+                </div>
+            </div>
+
+            <div class="input-wrapper">
+                <label for="username">Usuário (Username)</label>
+                <div class="input-icon-group">
+                    <i class="fa-solid fa-at input-icon"></i>
+                    <input type="text" id="username" name="username" value="{{ usuario.username }}" required placeholder="Nome de Usuário">
+                </div>
+            </div>
+            
+            <div class="input-wrapper">
+                <label for="senha">Nova Senha (deixe em branco para manter a atual)</label>
+                <div class="input-icon-group">
+                    <i class="fa-solid fa-lock input-icon"></i>
+                    <input type="password" id="senha" name="senha" placeholder="Digite uma nova senha se quiser alterar">
+                </div>
+            </div>
+
+            <div class="form-actions-row" style="margin-top: 1.5rem;">
+                <a href="/" class="btn-secondary">
+                    Cancelar
+                </a>
+                <button type="submit" class="btn-primary">
+                    Salvar Alterações <i class="fa-solid fa-floppy-disk"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

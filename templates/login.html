@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - Ticket Manager{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="glass-card auth-card">
+        <div class="card-header">
+            <h2>Bem-vindo de volta</h2>
+            <p>Entre na sua conta para gerenciar seus tickets</p>
+        </div>
+        <form action="{{ url_for('login') }}" method="POST" class="form-group">
+            <div class="input-wrapper">
+                <label for="username_or_email">Usuário ou E-mail</label>
+                <div class="input-icon-group">
+                    <i class="fa-solid fa-user input-icon"></i>
+                    <input type="text" id="username_or_email" name="username_or_email" required placeholder="Digite seu usuário ou email">
+                </div>
+            </div>
+            
+            <div class="input-wrapper">
+                <label for="senha">Senha</label>
+                <div class="input-icon-group">
+                    <i class="fa-solid fa-lock input-icon"></i>
+                    <input type="password" id="senha" name="senha" required placeholder="Digite sua senha">
+                </div>
+            </div>
+
+            <button type="submit" class="btn-primary btn-block">
+                <span>Entrar</span> <i class="fa-solid fa-arrow-right-to-bracket"></i>
+            </button>
+        </form>
+        <div class="card-footer">
+            <p>Não tem uma conta? <a href="{{ url_for('register') }}">Cadastre-se</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

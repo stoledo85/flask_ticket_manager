@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Ticket Manager{% endblock %}</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Background Animated Gradients -->
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <header class="app-header">
+        <div class="nav-container">
+            <a href="/" class="brand-logo">
+                <i class="fa-solid fa-ticket-simple text-glow"></i> Ticket<span>Manager</span>
+            </a>
+            <nav class="nav-links">
+                {% if session.get('user_id') %}
+                    {% if session.get('tipo_perfil') == 'Admin' %}
+                        <a href="{{ url_for('list_users') }}" class="nav-link"><i class="fa-solid fa-users"></i> Usuários</a>
+                        <a href="{{ url_for('list_categories') }}" class="nav-link"><i class="fa-solid fa-tags"></i> Categorias</a>
+                        <a href="{{ url_for('list_cities') }}" class="nav-link"><i class="fa-solid fa-city"></i> Cidades</a>
+                    {% endif %}
+                    <a href="{{ url_for('list_tickets') }}" class="nav-link"><i class="fa-solid fa-ticket-simple"></i> Chamados</a>
+                    <a href="{{ url_for('create_ticket') }}" class="nav-link"><i class="fa-solid fa-circle-plus"></i> Abrir Chamado</a>
+                    <a href="{{ url_for('user_profile') }}" class="nav-user-greeting" style="text-decoration: none;" title="Meu Perfil">Olá, <strong>{{ session.get('username') }}</strong></a>
+                    <a href="{{ url_for('logout') }}" class="btn-nav btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="nav-link"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+                    <a href="{{ url_for('register') }}" class="btn-nav btn-signup"><i class="fa-solid fa-user-plus"></i> Registrar</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-container">
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">
+                            <span class="flash-icon">
+                                {% if category == 'success' %}
+                                    <i class="fa-solid fa-circle-check"></i>
+                                {% elif category == 'danger' %}
+                                    <i class="fa-solid fa-circle-exclamation"></i>
+                                {% else %}
+                                    <i class="fa-solid fa-circle-info"></i>
+                                {% endif %}
+                            </span>
+                            <span class="flash-text">{{ message }}</span>
+                            <button class="flash-close-btn" onclick="this.parentElement.remove();">&times;</button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="app-footer">
+        <p>&copy; 2026 Ticket Manager. Desenvolvido com <i class="fa-solid fa-heart text-danger animate-pulse"></i> em Flask.</p>
+    </footer>
+</body>
+</html>

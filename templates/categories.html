@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}Gerenciar Categorias - Ticket Manager{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <div>
+            <h1>Categorias de Chamados</h1>
+            <p class="subtitle">Cadastre e gerencie as categorias que os usuários podem selecionar ao abrir chamados.</p>
+        </div>
+    </div>
+
+    <div class="form-row" style="grid-template-columns: 1fr 2fr; gap: 2rem;">
+        <!-- Card de Criação de Categoria -->
+        <div class="glass-card" style="padding: 1.5rem; height: fit-content;">
+            <h3 style="color: var(--text-primary); margin-bottom: 1rem;"><i class="fa-solid fa-folder-plus"></i> Nova Categoria</h3>
+            <form action="{{ url_for('create_category') }}" method="POST" class="form-group">
+                <div class="input-wrapper" style="margin-bottom: 1rem;">
+                    <label for="nome">Nome da Categoria</label>
+                    <div class="input-icon-group">
+                        <i class="fa-solid fa-tag input-icon"></i>
+                        <input type="text" id="nome" name="nome" required placeholder="Ex: Hardware, Acessos">
+                    </div>
+                </div>
+
+                <div class="input-wrapper" style="margin-bottom: 1.5rem;">
+                    <label for="descricao">Descrição (Opcional)</label>
+                    <div class="input-icon-group">
+                        <i class="fa-solid fa-align-left input-icon" style="top: 1rem;"></i>
+                        <textarea id="descricao" name="descricao" placeholder="Breve descrição da categoria..."></textarea>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary" style="width: 100%;">
+                    Criar Categoria <i class="fa-solid fa-plus"></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- Tabela de Categorias -->
+        <div class="glass-card table-responsive" style="padding: 1rem;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Descrição</th>
+                        <th class="text-center" style="width: 100px;">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for categoria in categorias %}
+                        <tr>
+                            <td>
+                                <strong style="color: var(--text-primary);">{{ categoria.nome }}</strong>
+                            </td>
+                            <td>
+                                <span style="color: var(--text-secondary);">{{ categoria.descricao or 'Sem descrição' }}</span>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <form action="{{ url_for('delete_category', category_id=categoria.id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir a categoria {{ categoria.nome }}?');" style="display:inline;">
+                                        <button type="submit" class="btn-action btn-delete" title="Excluir Categoria">
+                                            <i class="fa-solid fa-trash-can"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="3" class="no-data text-center">
+                                <i class="fa-regular fa-folder-open"></i>
+                                <p>Nenhuma categoria cadastrada até o momento.</p>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

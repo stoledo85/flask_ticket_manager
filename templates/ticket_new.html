@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Abrir Chamado - Ticket Manager{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="glass-card auth-card" style="max-width: 600px;">
+        <div class="card-header">
+            <h2>Abrir Novo Chamado</h2>
+            <p>Descreva o problema ou solicitação com detalhes para que possamos ajudar.</p>
+        </div>
+        <form action="{{ url_for('create_ticket') }}" method="POST" class="form-group">
+            <div class="input-wrapper">
+                <label for="titulo">Título do Chamado</label>
+                <div class="input-icon-group">
+                    <i class="fa-solid fa-heading input-icon"></i>
+                    <input type="text" id="titulo" name="titulo" required placeholder="Ex: Problema com acesso ao e-mail">
+                </div>
+            </div>
+
+            <div class="input-wrapper">
+                <label for="categoria_id">Categoria</label>
+                <div class="input-icon-group">
+                    <i class="fa-solid fa-tag input-icon"></i>
+                    <select id="categoria_id" name="categoria_id">
+                        <option value="">Sem Categoria (Nenhuma)</option>
+                        {% for categoria in categorias %}
+                            <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="input-wrapper">
+                <label for="prioridade">Prioridade</label>
+                <div class="input-icon-group">
+                    <i class="fa-solid fa-triangle-exclamation input-icon"></i>
+                    <select id="prioridade" name="prioridade" required>
+                        <option value="Baixa">Baixa</option>
+                        <option value="Média" selected>Média</option>
+                        <option value="Alta">Alta</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="input-wrapper">
+                <label for="descricao">Descrição Detalhada</label>
+                <div class="input-icon-group">
+                    <i class="fa-solid fa-align-left input-icon" style="top: 1rem;"></i>
+                    <textarea id="descricao" name="descricao" required placeholder="Descreva os detalhes da solicitação ou do problema ocorrido..."></textarea>
+                </div>
+            </div>
+
+            <div class="form-actions-row">
+                <a href="{{ url_for('list_tickets') }}" class="btn-secondary">
+                    Cancelar
+                </a>
+                <button type="submit" class="btn-primary">
+                    Abrir Chamado <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

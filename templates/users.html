@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Usuários - Ticket Manager{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <div>
+            <h1>Gerenciamento de Usuários</h1>
+            <p class="subtitle">Visualize, edite ou exclua usuários cadastrados no sistema.</p>
+        </div>
+        <a href="{{ url_for('register') }}" class="btn-primary">
+            <i class="fa-solid fa-user-plus"></i> Novo Usuário
+        </a>
+    </div>
+
+    <div class="glass-card table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Nome Completo</th>
+                    <th>E-mail</th>
+                    <th>Usuário</th>
+                    <th>Perfil</th>
+                    <th>Localidade</th>
+                    <th class="text-center">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for usuario in usuarios %}
+                    <tr>
+                        <td>
+                            <div class="user-info">
+                                <span class="user-avatar">{{ usuario.nome[0] | upper }}{{ usuario.sobrenome[0] | upper }}</span>
+                                <span class="user-fullname">{{ usuario.nome }} {{ usuario.sobrenome }}</span>
+                            </div>
+                        </td>
+                        <td>{{ usuario.email }}</td>
+                        <td><span class="badge badge-username">@{{ usuario.username }}</span></td>
+                        <td>
+                            <span class="badge badge-{{ usuario.tipo_perfil | lower }}">{{ usuario.tipo_perfil }}</span>
+                        </td>
+                        <td>
+                            {% if usuario.cidade %}
+                                <span style="color: var(--text-secondary);">{{ usuario.cidade.nome }} - {{ usuario.cidade.estado }}</span>
+                            {% else %}
+                                <span style="color: var(--text-secondary); font-style: italic; font-size: 0.9rem;">Não informado</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="{{ url_for('edit_user', user_id=usuario.id) }}" class="btn-action btn-edit" title="Editar Usuário">
+                                    <i class="fa-solid fa-user-pen"></i>
+                                </a>
+                                <form action="{{ url_for('delete_user', user_id=usuario.id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir o usuário {{ usuario.nome }}?');" style="display:inline;">
+                                    <button type="submit" class="btn-action btn-delete" title="Excluir Usuário">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="no-data text-center">
+                            <i class="fa-regular fa-folder-open"></i>
+                            <p>Nenhum usuário cadastrado até o momento.</p>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

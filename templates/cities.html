@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}Gerenciar Cidades - Ticket Manager{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <div>
+            <h1>Gerenciamento de Cidades</h1>
+            <p class="subtitle">Cadastre e gerencie as cidades disponíveis para os perfis de usuários no sistema.</p>
+        </div>
+    </div>
+
+    <div class="form-row" style="grid-template-columns: 1fr 2fr; gap: 2rem;">
+        <!-- Card de Criação de Cidade -->
+        <div class="glass-card" style="padding: 1.5rem; height: fit-content;">
+            <h3 style="color: var(--text-primary); margin-bottom: 1rem;"><i class="fa-solid fa-map-location-dot"></i> Nova Cidade</h3>
+            <form action="{{ url_for('create_city') }}" method="POST" class="form-group">
+                <div class="input-wrapper" style="margin-bottom: 1rem;">
+                    <label for="nome">Nome da Cidade</label>
+                    <div class="input-icon-group">
+                        <i class="fa-solid fa-city input-icon"></i>
+                        <input type="text" id="nome" name="nome" required placeholder="Ex: São Paulo, Rio de Janeiro">
+                    </div>
+                </div>
+
+                <div class="input-wrapper" style="margin-bottom: 1.5rem;">
+                    <label for="estado">Estado (UF)</label>
+                    <div class="input-icon-group">
+                        <i class="fa-solid fa-map-pin input-icon"></i>
+                        <input type="text" id="estado" name="estado" maxlength="2" required placeholder="Ex: SP, RJ">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary" style="width: 100%;">
+                    Cadastrar Cidade <i class="fa-solid fa-plus"></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- Tabela de Cidades -->
+        <div class="glass-card table-responsive" style="padding: 1rem;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Cidade</th>
+                        <th>Estado (UF)</th>
+                        <th class="text-center" style="width: 100px;">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cidade in cidades %}
+                        <tr>
+                            <td>
+                                <strong style="color: var(--text-primary);">{{ cidade.nome }}</strong>
+                            </td>
+                            <td>
+                                <span class="badge badge-username" style="font-size: 0.9rem;">{{ cidade.estado }}</span>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <form action="{{ url_for('delete_city', city_id=cidade.id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir a cidade {{ cidade.nome }}?');" style="display:inline;">
+                                        <button type="submit" class="btn-action btn-delete" title="Excluir Cidade">
+                                            <i class="fa-solid fa-trash-can"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="3" class="no-data text-center">
+                                <i class="fa-regular fa-folder-open"></i>
+                                <p>Nenhuma cidade cadastrada até o momento.</p>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
