@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +12,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script>
+        // Apply theme immediately to avoid flash of dark/light theme
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
 </head>
 <body>
     <!-- Background Animated Gradients -->
@@ -23,21 +28,35 @@
             <a href="/" class="brand-logo">
                 <i class="fa-solid fa-ticket-simple text-glow"></i> Ticket<span>Manager</span>
             </a>
-            <nav class="nav-links">
+            
+            <button class="menu-toggle-btn" id="menu-toggle-btn" title="Abrir menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <nav class="nav-links" id="nav-links">
                 {% if session.get('user_id') %}
+                    <a href="{{ url_for('list_tickets') }}" class="nav-link"><i class="fa-solid fa-ticket-simple"></i> Chamados</a>
+                    <a href="{{ url_for('create_ticket') }}" class="nav-link"><i class="fa-solid fa-circle-plus"></i> Abrir Chamado</a>
+                    
                     {% if session.get('tipo_perfil') == 'Admin' %}
                         <a href="{{ url_for('list_users') }}" class="nav-link"><i class="fa-solid fa-users"></i> Usuários</a>
                         <a href="{{ url_for('list_categories') }}" class="nav-link"><i class="fa-solid fa-tags"></i> Categorias</a>
                         <a href="{{ url_for('list_cities') }}" class="nav-link"><i class="fa-solid fa-city"></i> Cidades</a>
                     {% endif %}
-                    <a href="{{ url_for('list_tickets') }}" class="nav-link"><i class="fa-solid fa-ticket-simple"></i> Chamados</a>
-                    <a href="{{ url_for('create_ticket') }}" class="nav-link"><i class="fa-solid fa-circle-plus"></i> Abrir Chamado</a>
-                    <a href="{{ url_for('user_profile') }}" class="nav-user-greeting" style="text-decoration: none;" title="Meu Perfil">Olá, <strong>{{ session.get('username') }}</strong></a>
+                    
+                    <div class="nav-user-greeting">
+                        <span style="color: var(--text-primary);">Olá, <strong style="font-weight:600;"><a href="{{ url_for('user_profile') }}" style="color: inherit; text-decoration: none;" title="Ver Perfil">{{ session.get('username') }}</a></strong></span>
+                        <span class="badge badge-username" style="font-size:0.75rem;">{{ session.get('tipo_perfil') }}</span>
+                    </div>
                     <a href="{{ url_for('logout') }}" class="btn-nav btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
                 {% else %}
                     <a href="{{ url_for('login') }}" class="nav-link"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
                     <a href="{{ url_for('register') }}" class="btn-nav btn-signup"><i class="fa-solid fa-user-plus"></i> Registrar</a>
                 {% endif %}
+                
+                <button id="theme-toggle" class="theme-toggle-btn" title="Alternar tema">
+                    <i class="fa-solid fa-sun"></i>
+                </button>
             </nav>
         </div>
     </header>
@@ -72,5 +91,67 @@
     <footer class="app-footer">
         <p>&copy; 2026 Ticket Manager. Desenvolvido com <i class="fa-solid fa-heart text-danger animate-pulse"></i> em Flask.</p>
     </footer>
+
+    <!-- Theme and Mobile Nav Script -->
+    <script>
+        // Theme logic
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const icon = themeToggleBtn.querySelector('i');
+
+        function updateToggleIcon(theme) {
+            if (theme === 'light') {
+                icon.className = 'fa-solid fa-moon';
+            } else {
+                icon.className = 'fa-solid fa-sun';
+            }
+        }
+
+        updateToggleIcon(document.documentElement.getAttribute('data-theme'));
+
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateToggleIcon(newTheme);
+        });
+
+        // Mobile Nav toggles
+        const menuToggleBtn = document.getElementById('menu-toggle-btn');
+        const navLinks = document.getElementById('nav-links');
+
+        if (menuToggleBtn && navLinks) {
+            menuToggleBtn.addEventListener('click', (e) => {
+                navLinks.classList.toggle('active');
+                
+                // Change burger icon to cross when active
+                const toggleIcon = menuToggleBtn.querySelector('i');
+                if (navLinks.classList.contains('active')) {
+                    toggleIcon.className = 'fa-solid fa-xmark';
+                } else {
+                    toggleIcon.className = 'fa-solid fa-bars';
+                }
+                e.stopPropagation();
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!navLinks.contains(e.target) && !menuToggleBtn.contains(e.target)) {
+                    navLinks.classList.remove('active');
+                    menuToggleBtn.querySelector('i').className = 'fa-solid fa-bars';
+                }
+            });
+        }
+
+        // Highlight Active Link
+        const currentPath = window.location.pathname;
+        const links = document.querySelectorAll('.nav-link');
+        links.forEach(link => {
+            if (link.getAttribute('href') === currentPath) {
+                link.classList.add('active');
+            }
+        });
+    </script>
 </body>
 </html>

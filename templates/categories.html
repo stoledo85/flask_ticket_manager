@@ -11,7 +11,7 @@
         </div>
     </div>
 
-    <div class="form-row" style="grid-template-columns: 1fr 2fr; gap: 2rem;">
+    <div class="form-row form-grid-categories">
         <!-- Card de Criação de Categoria -->
         <div class="glass-card" style="padding: 1.5rem; height: fit-content;">
             <h3 style="color: var(--text-primary); margin-bottom: 1rem;"><i class="fa-solid fa-folder-plus"></i> Nova Categoria</h3>
@@ -51,17 +51,17 @@
                 <tbody>
                     {% for categoria in categorias %}
                         <tr>
-                            <td>
+                            <td data-label="Nome">
                                 <strong style="color: var(--text-primary);">{{ categoria.nome }}</strong>
                             </td>
-                            <td>
+                            <td data-label="Descrição">
                                 <span style="color: var(--text-secondary);">{{ categoria.descricao or 'Sem descrição' }}</span>
                             </td>
-                            <td>
+                            <td data-label="Ações">
                                 <div class="action-buttons">
                                     <form action="{{ url_for('delete_category', category_id=categoria.id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir a categoria {{ categoria.nome }}?');" style="display:inline;">
                                         <button type="submit" class="btn-action btn-delete" title="Excluir Categoria">
-                                            <i class="fa-solid fa-trash-can"></i>
+                                            <i class="fa-solid fa-trash-can"></i> Excluir
                                         </button>
                                     </form>
                                 </div>

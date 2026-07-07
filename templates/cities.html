@@ -11,7 +11,7 @@
         </div>
     </div>
 
-    <div class="form-row" style="grid-template-columns: 1fr 2fr; gap: 2rem;">
+    <div class="form-row form-grid-cities">
         <!-- Card de Criação de Cidade -->
         <div class="glass-card" style="padding: 1.5rem; height: fit-content;">
             <h3 style="color: var(--text-primary); margin-bottom: 1rem;"><i class="fa-solid fa-map-location-dot"></i> Nova Cidade</h3>
@@ -51,17 +51,17 @@
                 <tbody>
                     {% for cidade in cidades %}
                         <tr>
-                            <td>
+                            <td data-label="Cidade">
                                 <strong style="color: var(--text-primary);">{{ cidade.nome }}</strong>
                             </td>
-                            <td>
+                            <td data-label="Estado (UF)">
                                 <span class="badge badge-username" style="font-size: 0.9rem;">{{ cidade.estado }}</span>
                             </td>
-                            <td>
+                            <td data-label="Ações">
                                 <div class="action-buttons">
                                     <form action="{{ url_for('delete_city', city_id=cidade.id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir a cidade {{ cidade.nome }}?');" style="display:inline;">
                                         <button type="submit" class="btn-action btn-delete" title="Excluir Cidade">
-                                            <i class="fa-solid fa-trash-can"></i>
+                                            <i class="fa-solid fa-trash-can"></i> Excluir
                                         </button>
                                     </form>
                                 </div>

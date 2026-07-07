@@ -30,12 +30,12 @@
             <tbody>
                 {% for chamado in chamados %}
                     <tr>
-                        <td>
+                        <td data-label="Nº">
                             <span class="badge badge-username">#{{ chamado.id }}</span>
                         </td>
-                        <td>
-                            <div style="display: flex; flex-direction: column; gap: 0.25rem;">
-                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <td data-label="Título">
+                            <div style="display: flex; flex-direction: column; gap: 0.25rem; text-align: left; width: 100%;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
                                     <strong style="color: var(--text-primary);">{{ chamado.titulo }}</strong>
                                     {% if chamado.categoria %}
                                         <span class="badge badge-username" style="font-size: 0.75rem; padding: 0.1rem 0.4rem; background-color: rgba(99, 102, 241, 0.1); color: var(--primary);">{{ chamado.categoria.nome }}</span>
@@ -46,25 +46,25 @@
                                 </small>
                             </div>
                         </td>
-                        <td>
+                        <td data-label="Criado por">
                             <span style="color: var(--text-secondary);">{{ chamado.usuario.nome }} {{ chamado.usuario.sobrenome }}</span>
                         </td>
-                        <td>
+                        <td data-label="Prioridade">
                             <span class="badge badge-{{ chamado.prioridade | lower }}">{{ chamado.prioridade }}</span>
                         </td>
-                        <td>
+                        <td data-label="Status">
                             {% set status_class = chamado.status.lower().replace(' ', '') %}
                             <span class="badge badge-{{ status_class }}">{{ chamado.status }}</span>
                         </td>
-                        <td>
+                        <td data-label="Data">
                             <span style="color: var(--text-secondary); font-size: 0.9rem;">
                                 {{ chamado.data_criacao.strftime('%d/%m/%Y %H:%M') }}
                             </span>
                         </td>
-                        <td>
+                        <td data-label="Ações">
                             <div class="action-buttons">
                                 <a href="{{ url_for('ticket_details', ticket_id=chamado.id) }}" class="btn-action btn-edit" title="Ver Detalhes/Responder">
-                                    <i class="fa-solid fa-eye"></i>
+                                    <i class="fa-solid fa-eye"></i> Detalhes
                                 </a>
                             </div>
                         </td>

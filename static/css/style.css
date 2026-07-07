@@ -1,6 +1,7 @@
 /* Design System & Variables */
 :root {
     --bg-dark: #0a0b10;
+    --bg-sidebar: rgba(10, 11, 16, 0.85);
     --bg-card: rgba(20, 22, 35, 0.45);
     --border-color: rgba(255, 255, 255, 0.08);
     --border-glow: rgba(99, 102, 241, 0.2);
@@ -20,6 +21,27 @@
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+[data-theme="light"] {
+    --bg-dark: #f8fafc;
+    --bg-sidebar: rgba(255, 255, 255, 0.85);
+    --bg-card: rgba(255, 255, 255, 0.8);
+    --border-color: rgba(0, 0, 0, 0.08);
+    --border-glow: rgba(99, 102, 241, 0.15);
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --primary: #4f46e5;
+    --primary-hover: #4338ca;
+    --primary-glow: rgba(79, 70, 229, 0.3);
+    --secondary: #e2e8f0;
+    --secondary-hover: #cbd5e1;
+    --danger: #ef4444;
+    --danger-hover: #dc2626;
+    --danger-glow: rgba(239, 68, 68, 0.15);
+    --success: #10b981;
+    --success-glow: rgba(16, 185, 129, 0.15);
+}
+
+
 /* Reset & Base Styles */
 * {
     margin: 0;
@@ -36,6 +58,30 @@ body {
     flex-direction: column;
     overflow-x: hidden;
     position: relative;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Theme Toggle Button */
+.theme-toggle-btn {
+    background: none;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: var(--transition-smooth);
+}
+
+.theme-toggle-btn:hover {
+    color: var(--primary);
+    border-color: var(--primary);
+    background-color: rgba(99, 102, 241, 0.08);
+    transform: rotate(15deg);
 }
 
 /* Background Glow Effects */
@@ -85,11 +131,12 @@ a:hover {
 .app-header {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    background-color: rgba(10, 11, 16, 0.7);
+    background-color: var(--bg-sidebar);
     border-bottom: 1px solid var(--border-color);
     position: sticky;
     top: 0;
     z-index: 100;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .nav-container {
@@ -99,6 +146,64 @@ a:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.nav-link {
+    color: var(--text-secondary);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    transition: var(--transition-smooth);
+}
+
+.nav-link:hover, .nav-link.active {
+    color: var(--text-primary);
+    background-color: rgba(99, 102, 241, 0.08);
+}
+
+.nav-link.active {
+    color: var(--primary) !important;
+    font-weight: 600;
+}
+
+.nav-user-greeting {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    border-left: 1px solid var(--border-color);
+    padding-left: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Mobile Menu Button */
+.menu-toggle-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.3rem;
+    cursor: pointer;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-smooth);
+}
+
+.menu-toggle-btn:hover {
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
 .brand-logo {
@@ -283,6 +388,21 @@ a:hover {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
+}
+
+.form-grid-cities,
+.form-grid-categories {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+}
+
+@media (max-width: 768px) {
+    .form-grid-cities,
+    .form-grid-categories {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
 }
 
 .input-wrapper {
@@ -523,8 +643,9 @@ a:hover {
 }
 
 .btn-action {
-    width: 36px;
+    min-width: 36px;
     height: 36px;
+    padding: 0 0.75rem;
     border-radius: 8px;
     border: 1px solid var(--border-color);
     background-color: rgba(255, 255, 255, 0.02);
@@ -532,8 +653,12 @@ a:hover {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 0.4rem;
     cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
     transition: var(--transition-smooth);
+    text-decoration: none;
 }
 
 .btn-edit:hover {
@@ -592,18 +717,156 @@ a:hover {
         grid-template-columns: 1fr;
     }
     
-    .nav-user-greeting {
-        display: none;
-    }
-    
     .page-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 1rem;
+        margin-bottom: 1.5rem;
     }
     
-    .page-header .btn-primary {
+    .page-header h1 {
+        font-size: 1.6rem;
+    }
+    
+    .page-header .btn-primary,
+    .page-header .btn-secondary {
         width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .container {
+        padding: 0 1rem;
+        margin: 1rem auto;
+    }
+
+    /* Responsividade do Menu Superior */
+    .menu-toggle-btn {
+        display: flex;
+    }
+
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: var(--bg-sidebar);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--border-color);
+        padding: 1.5rem;
+        gap: 1rem;
+        z-index: 101;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .nav-user-greeting {
+        border-left: none;
+        border-top: 1px solid var(--border-color);
+        padding-left: 0;
+        padding-top: 1rem;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .btn-logout {
+        width: 100%;
+        text-align: center;
+    }
+
+    .theme-toggle-btn {
+        align-self: center;
+    }
+
+    /* Table adjustments for mobile */
+    .table-responsive {
+        border: none;
+        background: none;
+        box-shadow: none;
+    }
+
+    .data-table {
+        display: block;
+    }
+
+    .data-table thead {
+        display: none; /* Hide traditional table header on mobile */
+    }
+
+    .data-table tbody {
+        display: block;
+        width: 100%;
+    }
+
+    .data-table tr {
+        display: block;
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .data-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        text-align: right;
+        font-size: 0.9rem;
+    }
+
+    .data-table td:last-child {
+        border-bottom: none;
+        justify-content: center;
+        padding-top: 1rem;
+    }
+
+    /* Label generation for mobile table cells */
+    .data-table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: var(--text-secondary);
+        text-align: left;
+        margin-right: 1rem;
+    }
+
+    /* Reset styles that might conflict inside card td view */
+    .data-table td .action-buttons {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .data-table td .badge-username {
+        margin-left: auto;
+    }
+
+    /* Timeline Adjustments */
+    .timeline {
+        padding-left: 1.25rem;
+    }
+    .timeline-header {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+    
+    /* Form actions responsive */
+    .form-actions-row {
+        flex-direction: column-reverse;
+        gap: 0.75rem;
+    }
+    .form-actions-row button, 
+    .form-actions-row a {
+        width: 100%;
+        text-align: center;
     }
 }
 

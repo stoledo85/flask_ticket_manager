@@ -29,32 +29,32 @@
             <tbody>
                 {% for usuario in usuarios %}
                     <tr>
-                        <td>
-                            <div class="user-info">
+                        <td data-label="Nome Completo">
+                            <div class="user-info" style="justify-content: flex-end; width: 100%;">
                                 <span class="user-avatar">{{ usuario.nome[0] | upper }}{{ usuario.sobrenome[0] | upper }}</span>
                                 <span class="user-fullname">{{ usuario.nome }} {{ usuario.sobrenome }}</span>
                             </div>
                         </td>
-                        <td>{{ usuario.email }}</td>
-                        <td><span class="badge badge-username">@{{ usuario.username }}</span></td>
-                        <td>
+                        <td data-label="E-mail">{{ usuario.email }}</td>
+                        <td data-label="Usuário"><span class="badge badge-username">@{{ usuario.username }}</span></td>
+                        <td data-label="Perfil">
                             <span class="badge badge-{{ usuario.tipo_perfil | lower }}">{{ usuario.tipo_perfil }}</span>
                         </td>
-                        <td>
+                        <td data-label="Localidade">
                             {% if usuario.cidade %}
                                 <span style="color: var(--text-secondary);">{{ usuario.cidade.nome }} - {{ usuario.cidade.estado }}</span>
                             {% else %}
                                 <span style="color: var(--text-secondary); font-style: italic; font-size: 0.9rem;">Não informado</span>
                             {% endif %}
                         </td>
-                        <td>
+                        <td data-label="Ações">
                             <div class="action-buttons">
                                 <a href="{{ url_for('edit_user', user_id=usuario.id) }}" class="btn-action btn-edit" title="Editar Usuário">
-                                    <i class="fa-solid fa-user-pen"></i>
+                                    <i class="fa-solid fa-user-pen"></i> Editar
                                 </a>
                                 <form action="{{ url_for('delete_user', user_id=usuario.id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir o usuário {{ usuario.nome }}?');" style="display:inline;">
                                     <button type="submit" class="btn-action btn-delete" title="Excluir Usuário">
-                                        <i class="fa-solid fa-trash-can"></i>
+                                        <i class="fa-solid fa-trash-can"></i> Excluir
                                     </button>
                                 </form>
                             </div>
